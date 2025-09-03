@@ -5,6 +5,7 @@ import { BsCameraVideoFill } from "react-icons/bs";
 import { BsFillBellFill } from "react-icons/bs";
 import SearchBar from "./Searchbar";
 import UserMenu from "./UserMenu";
+import { ReactComponent as BellIcon } from "../assets/icons/bell-icon.svg";
 
 export function Navbar() {
   return (
@@ -17,7 +18,7 @@ export function Navbar() {
       </LeftSection>
       <NavLinks>
         <BsCameraVideoFill color={colors.primary} size={21}/>
-        <BsFillBellFill color={colors.primary} size={21}/>
+        <BellIcon />
         <UserMenu />
       </NavLinks>
     </Nav>
