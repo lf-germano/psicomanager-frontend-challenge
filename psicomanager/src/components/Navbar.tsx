@@ -1,13 +1,24 @@
 import styled from "styled-components";
+import { ReactComponent as HeaderLogo } from "../assets/images/header-logo.svg";
+import { colors } from "../styles/colors";
+import { BsCameraVideoFill } from "react-icons/bs";
+import { BsFillBellFill } from "react-icons/bs";
+import SearchBar from "./Searchbar";
+import UserMenu from "./UserMenu";
 
 export function Navbar() {
   return (
     <Nav>
-      <Logo>PsicoManager</Logo>
+      <LeftSection>
+      <Logo>
+        <HeaderLogo style={{ height: "32px" }} />
+      </Logo>
+      <SearchBar />
+      </LeftSection>
       <NavLinks>
-        <a href="/">Início</a>
-        <a href="/finances">Financeiro</a>
-        <a href="/profile">Perfil</a>
+        <BsCameraVideoFill color={colors.primary} size={21}/>
+        <BsFillBellFill color={colors.primary} size={21}/>
+        <UserMenu />
       </NavLinks>
     </Nav>
   );
@@ -20,16 +31,26 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid ${colors.border};
 `;
 
+const LeftSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;
 const Logo = styled.div`
   font-weight: bold;
   font-size: 1.2rem;
+  display: flex;
+  align-items: center;
 `;
 
 const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
   a {
-    margin-left: 2rem;
     text-decoration: none;
     color: #333;
     font-weight: 500;

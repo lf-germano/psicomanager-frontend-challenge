@@ -118,6 +118,7 @@ const SideNav = styled.div`
   align-items: center;
   padding: 2rem 8px 0 8px; // horizontal padding added
   box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+  border-right: 1px solid ${colors.border};
   z-index: 100;
 `;
 
@@ -136,7 +137,7 @@ const IconButton = styled.button<{ active?: boolean }>`
   ${({ active }) =>
     active &&
     css`
-      background: ${colors.primary};
+      background: ${colors.accent};
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     `}
@@ -145,7 +146,7 @@ const IconButton = styled.button<{ active?: boolean }>`
     border-radius: 8px;
   }
   &:focus {
-    background: ${colors.primary};
+    background: ${colors.accent};
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
