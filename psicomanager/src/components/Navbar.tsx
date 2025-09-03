@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { ReactComponent as HeaderLogo } from "../assets/images/header-logo.svg";
 import { colors } from "../styles/colors";
-import { BsCameraVideoFill } from "react-icons/bs";
-import { BsFillBellFill } from "react-icons/bs";
 import SearchBar from "./Searchbar";
 import UserMenu from "./UserMenu";
 import { ReactComponent as BellIcon } from "../assets/icons/bell-icon.svg";
+import { ReactComponent as CameraIcon } from "../assets/icons/camera-icon.svg";
 
 export function Navbar() {
   return (
@@ -17,7 +16,7 @@ export function Navbar() {
       <SearchBar />
       </LeftSection>
       <NavLinks>
-        <BsCameraVideoFill color={colors.primary} size={21}/>
+        <CameraIcon />
         <BellIcon />
         <UserMenu />
       </NavLinks>
