@@ -6,6 +6,9 @@ import RegisterAccount from "./pages/RegisterAccount";
 import Channels from "./pages/Channels";
 import PaymentType from "./pages/PaymentType";
 import { useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { ClearButton } from "../../components/ClearButton";
+import { MainButton } from "../../components/MainButton";
 
 type FinancesProps = {
   onClose?: () => void;
@@ -41,7 +44,7 @@ export function Finances({ onClose }: FinancesProps) {
     <Container>
       <Header>
         <Title>Ativar o PsicoBank</Title>
-        <CloseIcon onClick={onClose} title="Fechar" />
+        <CloseIcon color={colors.info} size={30} onClick={onClose} title="Fechar" />
       </Header>
       <CustomStepper
         steps={steps}
@@ -52,10 +55,8 @@ export function Finances({ onClose }: FinancesProps) {
       />
       <Content>{PageContent}</Content>
       <Footer>
-        <ClearButton onClick={handleCancel}>Cancelar</ClearButton>
-        <MainButton onClick={handleNext} disabled={activeStep === steps.length - 1}>
-          Próximo
-        </MainButton>
+        <ClearButton title="Cancelar" onClick={handleCancel} />
+        <MainButton title="Próximo" onClick={handleNext} disabled={activeStep === steps.length - 1} />
       </Footer>
     </Container>
   );
@@ -80,9 +81,10 @@ const Title = styled.h2`
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
+  font-color: ${colors.textPrimary};
 `;
 
-const CloseIcon = styled(FiX)`
+const CloseIcon = styled(IoClose)`
   cursor: pointer;
   font-size: 2rem;
   color: ${colors.markerBlue};
@@ -99,23 +101,3 @@ const Footer = styled.div`
   gap: 1rem;
 `;
 
-const ClearButton = styled.button`
-  padding: 0.75rem 1.5rem;
-  background: transparent;
-  border: 2px solid ${colors.lightBlue};
-  color: ${colors.lightBlue};
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-`;
-
-const MainButton = styled.button<{ disabled?: boolean }>`
-  padding: 0.75rem 1.5rem;
-  background: ${colors.markerBlue};
-  border: none;
-  color: white;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
-`;
