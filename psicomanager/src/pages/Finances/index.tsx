@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import { FiX } from "react-icons/fi";
+import { IoClose } from "react-icons/io5";
 import CustomStepper from "../../components/CustomStepper";
 import { colors } from "../../styles/colors";
 import RegisterAccount from "./pages/RegisterAccount";
 import Channels from "./pages/Channels";
 import PaymentType from "./pages/PaymentType";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { accountSchema } from "../../utils/validators/accountSchema";
+import Alert from "../../components/Alert";
 import { useState } from "react";
-import { IoClose } from "react-icons/io5";
 import { ClearButton } from "../../components/ClearButton";
 import { MainButton } from "../../components/MainButton";
+import { PersonType } from "../../utils/enums/PersonType";
 
 type FinancesProps = {
   onClose?: () => void;
@@ -22,8 +26,34 @@ const steps = [
 
 export function Finances({ onClose }: FinancesProps) {
   const [activeStep, setActiveStep] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
 
-  const handleNext = () => {
+  // Only the first step uses the form for now
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    trigger,
+  } = useForm({
+    resolver: zodResolver(accountSchema),
+    mode: "onChange",
+    defaultValues: {
+      professional: "joao_silva",
+      personType: PersonType.FISICA,
+    },
+  });
+
+  const handleNext = async () => {
+    if (activeStep === 0) {
+      const valid = await trigger();
+      if (!valid) {
+        setAlertOpen(true);
+        return;
+      }
+    }
     if (activeStep < steps.length - 1) setActiveStep((prev) => prev + 1);
   };
 
@@ -36,7 +66,16 @@ export function Finances({ onClose }: FinancesProps) {
   };
 
   let PageContent;
-  if (activeStep === 0) PageContent = <RegisterAccount />;
+  if (activeStep === 0)
+    PageContent = (
+      <RegisterAccount
+        register={register}
+        control={control}
+        watch={watch}
+        errors={errors}
+        setValue={setValue}
+      />
+    );
   else if (activeStep === 1) PageContent = <Channels />;
   else PageContent = <PaymentType />;
 
@@ -58,6 +97,12 @@ export function Finances({ onClose }: FinancesProps) {
         <ClearButton title="Cancelar" onClick={handleCancel} />
         <MainButton title="Próximo" onClick={handleNext} disabled={activeStep === steps.length - 1} />
       </Footer>
+      <Alert
+        open={alertOpen}
+        title="Campos obrigatórios"
+        message="Preencha todos os campos obrigatórios destacados em vermelho."
+        onClose={() => setAlertOpen(false)}
+      />
     </Container>
   );
 }
