@@ -3,8 +3,8 @@ import { ReactComponent as HeaderLogo } from "../assets/images/header-logo.svg";
 import { colors } from "../styles/colors";
 import SearchBar from "./Searchbar";
 import UserMenu from "./UserMenu";
-import { ReactComponent as BellIcon } from "../../assets/icons/bell-icon.svg";
-import { ReactComponent as CameraIcon } from "../../assets/icons/camera-icon.svg";
+import { ReactComponent as BellIcon } from "../assets/icons/bell-icon.svg";
+import { ReactComponent as CameraIcon } from "../assets/icons/camera-icon.svg";
 
 export function Navbar() {
   return (

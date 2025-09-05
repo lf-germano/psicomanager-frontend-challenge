@@ -170,6 +170,14 @@ const Container = styled.div`
   align-items: stretch;
   padding: 2rem;
   width: 50rem;
+  max-width: 100vw;
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 1rem;
+    width: 100vw;
+    min-width: 0;
+  }
 `;
 
 const Header = styled.div`
@@ -177,13 +185,21 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
+
+  @media (max-width: 600px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const Title = styled.h2`
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
-  font-color: ${colors.textPrimary};
+  color: ${colors.textPrimary};
+
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+  }
 `;
 
 const CloseIcon = styled(IoClose)`
@@ -195,11 +211,23 @@ const CloseIcon = styled(IoClose)`
 const Content = styled.div`
   flex: 1;
   margin: 2rem 0;
+
+  @media (max-width: 600px) {
+    margin: 1rem 0;
+  }
 `;
 
 const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    button {
+      width: 100%;
+    }
+  }
 `;
 
