@@ -1,6 +1,7 @@
 import { Controller } from "react-hook-form";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
+import { maskCPF, maskCNPJ, maskPhone, maskCEP, maskAgency, maskBankAccount, maskNumber } from "../../../utils/maskUtils";
 import {
   Box,
   FormControl,
@@ -222,24 +223,39 @@ export function RegisterAccount({
             <Label>
               Agência <Required>*</Required>
             </Label>
-            <TextField
-              {...register("agency")}
-              placeholder="0001"
-              error={!!errors.agency}
-              fullWidth
-              size="small"
+            <Controller
+              name="agency"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={maskAgency(field.value || "")}
+                  onChange={e => field.onChange(maskAgency(e.target.value))}
+                  placeholder="0001"
+                  error={!!errors.agency}
+                  fullWidth
+                  inputMode='numeric'
+                  size="small"
+                />)}
             />
           </Box>
           <Box flex={1}>
             <Label>
               Conta com Dígito <Required>*</Required>
             </Label>
-            <TextField
-              {...register("accountNumber")}
-              placeholder="123456-7"
-              error={!!errors.accountNumber}
-              fullWidth
-              size="small"
+            <Controller
+              name="accountNumber"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={maskBankAccount(field.value || "")}
+                  onChange={e => field.onChange(maskBankAccount(e.target.value))}
+                  placeholder="123456-7"
+                  error={!!errors.accountNumber}
+                  fullWidth
+                  size="small"
+                />)}
             />
           </Box>
         </Box>
@@ -281,24 +297,42 @@ export function RegisterAccount({
                 <Label>
                   CPF <Required>*</Required>
                 </Label>
-                <TextField
-                  {...register("cpf")}
-                  placeholder="123.456.789-00"
-                  error={!!errors.cpf}
-                  fullWidth
-                  size="small"
+                <Controller
+                  name="cpf"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      value={maskCPF(field.value || "")}
+                      onChange={e => field.onChange(maskCPF(e.target.value))}
+                      placeholder="123.456.789-00"
+                      error={!!errors.cpf}
+                      fullWidth
+                      inputMode='numeric'
+                      size="small"
+                    />
+                  )}
                 />
               </Box>
               <Box flex={1}>
                 <Label>
                   Telefone <Required>*</Required>
                 </Label>
-                <TextField
-                  {...register("phone")}
-                  placeholder="(34) 99999-9999"
-                  error={!!errors.phone}
-                  fullWidth
-                  size="small"
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      value={maskPhone(field.value || "")}
+                      onChange={e => field.onChange(maskPhone(e.target.value))}
+                      placeholder="(99) 99999-9999"
+                      error={!!errors.phone}
+                      fullWidth
+                      inputMode='numeric'
+                      size="small"
+                    />
+                  )}
                 />
               </Box>
             </>
@@ -308,12 +342,20 @@ export function RegisterAccount({
                 <Label>
                   CNPJ <Required>*</Required>
                 </Label>
-                <TextField
-                  {...register("cnpj")}
-                  placeholder="__.___.___/____-__"
-                  error={!!errors.cnpj}
-                  fullWidth
-                  size="small"
+                <Controller
+                  name="cnpj"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      value={maskCNPJ(field.value || "")}
+                      onChange={e => field.onChange(maskCNPJ(e.target.value))}
+                      placeholder="12.345.678/0001-90"
+                      error={!!errors.cnpj}
+                      fullWidth
+                      size="small"
+                    />
+                  )}
                 />
               </Box>
               <Box flex={1}>
@@ -396,12 +438,21 @@ export function RegisterAccount({
             <Label>
               CEP <Required>*</Required>
             </Label>
-            <TextField
-              {...register("cep")}
-              placeholder="__.___-___"
-              error={!!errors.cep}
-              fullWidth
-              size="small"
+            <Controller
+              name="cep"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={maskCEP(field.value || "")}
+                  onChange={e => field.onChange(maskCEP(e.target.value))}
+                  placeholder="12345-678"
+                  error={!!errors.cep}
+                  fullWidth
+                  inputMode='numeric'
+                  size="small"
+                />
+              )}
             />
           </Box>
           <Box flex={1}>
@@ -463,12 +514,20 @@ export function RegisterAccount({
             <Label>
               Número <Required>*</Required>
             </Label>
-            <TextField
-              {...register("number")}
-              placeholder="Digite aqui"
-              error={!!errors.number}
-              fullWidth
-              size="small"
+            <Controller
+              name="number"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  value={maskNumber(field.value || "")}
+                  onChange={e => field.onChange(maskNumber(e.target.value))}
+                  placeholder="Digite aqui"
+                  error={!!errors.number}
+                  fullWidth
+                  inputMode='numeric'
+                  size="small"
+                />)}
             />
           </Box>
         </Box>
