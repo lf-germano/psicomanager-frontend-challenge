@@ -11,10 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { colors } from "../../../styles/colors";
-import { PersonType } from "../../../utils/enums/PersonType";
-import { accountSchema } from "../../../utils/validators/accountSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
 const theme = createTheme({
   typography: {
@@ -65,8 +61,6 @@ const DisabledLabel = styled(Typography)(({ theme }) => ({
   color: colors.textInactive,
 }));
 
-type AccountForm = z.infer<typeof accountSchema>;
-
 const PROFESSIONAL_OPTIONS = [
   { value: "joao_silva", label: "João Silva" },
 ];
@@ -89,9 +83,35 @@ const PERSON_TYPE_OPTIONS = [
 ];
 
 const STATE_OPTIONS = [
-  { value: "SP", label: "São Paulo" },
+  { value: "AC", label: "Acre" },
+  { value: "AL", label: "Alagoas" },
+  { value: "AP", label: "Amapá" },
+  { value: "AM", label: "Amazonas" },
+  { value: "BA", label: "Bahia" },
+  { value: "CE", label: "Ceará" },
+  { value: "DF", label: "Distrito Federal" },
+  { value: "ES", label: "Espírito Santo" },
+  { value: "GO", label: "Goiás" },
+  { value: "MA", label: "Maranhão" },
+  { value: "MT", label: "Mato Grosso" },
+  { value: "MS", label: "Mato Grosso do Sul" },
+  { value: "MG", label: "Minas Gerais" },
+  { value: "PA", label: "Pará" },
+  { value: "PB", label: "Paraíba" },
+  { value: "PR", label: "Paraná" },
+  { value: "PE", label: "Pernambuco" },
+  { value: "PI", label: "Piauí" },
   { value: "RJ", label: "Rio de Janeiro" },
+  { value: "RN", label: "Rio Grande do Norte" },
+  { value: "RS", label: "Rio Grande do Sul" },
+  { value: "RO", label: "Rondônia" },
+  { value: "RR", label: "Roraima" },
+  { value: "SC", label: "Santa Catarina" },
+  { value: "SP", label: "São Paulo" },
+  { value: "SE", label: "Sergipe" },
+  { value: "TO", label: "Tocantins" },
 ];
+
 
 type RegisterAccountProps = {
   register: any;
@@ -142,7 +162,7 @@ export function RegisterAccount({
             <DisabledLabel>
               Profissional: <Required>*</Required>
             </DisabledLabel>
-            <FormControl fullWidth>
+            <FormControl fullWidth error={!!errors.professional} size="small">
               <Controller
                 name="professional"
                 control={control}
@@ -274,7 +294,7 @@ export function RegisterAccount({
             <Label>
               Tipo de Pessoa <Required>*</Required>
             </Label>
-            <FormControl fullWidth size="small">
+            <FormControl fullWidth error={!!errors.personType} size="small">
               <Controller
                 name="personType"
                 control={control}
@@ -371,12 +391,21 @@ export function RegisterAccount({
                 <Label>
                   Telefone <Required>*</Required>
                 </Label>
-                <TextField
-                  {...register("phone")}
-                  placeholder="(__) _____-____"
-                  error={!!errors.phone}
-                  fullWidth
-                  size="small"
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      value={maskPhone(field.value || "")}
+                      onChange={e => field.onChange(maskPhone(e.target.value))}
+                      placeholder="(99) 99999-9999"
+                      error={!!errors.phone}
+                      fullWidth
+                      inputMode='numeric'
+                      size="small"
+                    />
+                  )}
                 />
               </Box>
             </>
@@ -421,13 +450,15 @@ export function RegisterAccount({
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    {...field}placeholder="___.___.___-__"
+                    {...field}
+                    placeholder="___.___.___-__"
                     value={maskCPF(field.value || "")}
                     onChange={e => field.onChange(maskCPF(e.target.value))}
-                error={!!errors.responsibleCpf}
-                fullWidth
-                size="small"
-              />)}
+                    error={!!errors.responsibleCpf}
+                    fullWidth
+                    size="small"
+                  />
+                )}
               />
             </Box>
           </Box>

@@ -5,21 +5,23 @@ import { colors } from "../../styles/colors";
 import RegisterAccount from "./pages/RegisterAccount";
 import Channels from "./pages/Channels";
 import PaymentType from "./pages/PaymentType";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { UseFormReturn } from "react-hook-form";
 import { accountSchema } from "../../utils/validators/accountSchema";
-import Alert from "../../components/Alert";
+import { channelsSchema } from "../../utils/validators/channelsSchema";
+import { paymentTypeSchema } from "../../utils/validators/paymentTypeSchema";
+import { CustomAlert } from "../../components/CustomAlert";
 import { useState } from "react";
 import { ClearButton } from "../../components/ClearButton";
 import { MainButton } from "../../components/MainButton";
-import { PersonType } from "../../utils/enums/PersonType";
 import { z } from "zod";
+import { PsicoBankForm } from "../../utils/validators/psicobankFormSchema";
 
 type AccountFormValues = z.infer<typeof accountSchema>;
 
 type FinancesProps = {
   onClose?: () => void;
-  form: UseFormReturn<AccountFormValues>;
+  form: UseFormReturn<PsicoBankForm>;
+  onSuccess: () => void; 
 };
 
 const steps = [
@@ -28,9 +30,9 @@ const steps = [
   "Forma de pagamento da cobrança",
 ];
 
-export function Finances({ onClose, form }: FinancesProps) {
+export function Finances({ onClose, form, onSuccess }: FinancesProps) {
   const [activeStep, setActiveStep] = useState(0);
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
 
   const {
     register,
@@ -55,37 +57,43 @@ export function Finances({ onClose, form }: FinancesProps) {
     return messages;
   };
 
+  const handleFormSent = (data: AccountFormValues) => {
+    console.log("Formulário completo enviado:", data);
+    onSuccess();
+  };
+
   const handleNext = async () => {
-    console.log("handleNext");
-    console.log("activeStep", activeStep);
     if (activeStep === 0) {
-      const valid = await trigger();
-      if (!valid) {
-        const errorList = collectErrorMessages(errors);
-        console.log("Validation errors:", errorList);
-        setAlertOpen(true);
+      const result = await accountSchema.safeParseAsync(watch());
+      if (!result.success) {
+        setErrorAlertOpen(true);
         return;
       }
-    }
-    if (activeStep === 1) {
-      const message = watch("message") || "";
-      const tempElem = document.createElement("div");
-      tempElem.innerHTML = message;
-      const plainText = tempElem.textContent || "";
-      if (!plainText.trim()) {
-        console.log("Validation error: message is empty");
-        setAlertOpen(true);
+    } else if (activeStep === 1) {
+      const result = await channelsSchema.safeParseAsync({ message: watch("message") });
+      if (!result.success) {
+        setErrorAlertOpen(true);
         return;
       }
-    }
-    if (activeStep === steps.length - 1) {
-      const formData = watch();
-      console.log("Final form data:", formData);  
-      if (onClose) onClose();
+    } else if (activeStep === 2) {
+      const result = await paymentTypeSchema.safeParseAsync({
+        paymentTypes: watch("paymentTypes"),
+        chargeFine: watch("chargeFine"),
+        fineValue: watch("fineValue"),
+        chargeInterest: watch("chargeInterest"),
+      });
+      if (!result.success) {
+        console.log(result.error.issues);
+        setErrorAlertOpen(true);
+        return;
+      }
+      console.log("Final validation passed");
+      handleFormSent(watch());
       return;
     }
-
-    if (activeStep < steps.length - 1) setActiveStep((prev) => prev + 1);
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prev) => prev + 1);
+    }
   };
 
   const handleCancel = () => {
@@ -143,13 +151,14 @@ export function Finances({ onClose, form }: FinancesProps) {
       <Content>{PageContent}</Content>
       <Footer>
         <ClearButton title="Cancelar" onClick={handleCancel} />
-        <MainButton title={activeStep == steps.length - 1 ? "Concluir" : "Próximo"} onClick={handleNext} disabled={activeStep === steps.length - 1} />
+        <MainButton title={activeStep == steps.length - 1 ? "Concluir" : "Próximo"} onClick={handleNext} disabled={false} />
       </Footer>
-      <Alert
-        open={alertOpen}
+      <CustomAlert
+        open={errorAlertOpen}
         title="Atenção!"
         message="Os campos obrigatórios não foram preenchidos"
-        onClose={() => setAlertOpen(false)}
+        type={'error'}
+        onClose={() => setErrorAlertOpen(false)}
       />
     </Container>
   );

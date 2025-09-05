@@ -5,6 +5,7 @@ import {
   StepLabel,
   StepConnector,
   styled,
+  stepConnectorClasses,
 } from "@mui/material";
 import { IoMdCheckmark } from "react-icons/io";
 import { colors } from "../styles/colors";
@@ -12,26 +13,36 @@ import { colors } from "../styles/colors";
 interface CustomStepperProps {
   activeStep: number;
   steps: string[];
-  mainColor: string; 
-  baseColor: string; 
+  mainColor: string;
+  baseColor: string;
   skeletonColor: string;
 }
 
-const CustomStepConnector = styled(StepConnector)<{ skeletonColor: string }>(
-  ({ skeletonColor }) => ({
-    "&.MuiStepConnector-root": {
-      zIndex: 0,
+const CustomConnector = styled(StepConnector, {
+  name: "CustomConnector",
+})<{ baseColor: string; skeletonColor: string }>(({ baseColor, skeletonColor }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 15,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundColor: baseColor,
     },
-    "& .MuiStepConnector-line": {
-      height: 4,
-      border: "none",
-      backgroundColor: skeletonColor, 
-      borderRadius: 2,
-      marginLeft: "-15px", 
-      marginRight: "-15px", 
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      backgroundColor: baseColor,
     },
-  })
-);
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 4,
+    border: 0,
+    backgroundColor: skeletonColor,
+    borderRadius: 2,
+    marginLeft: "-15px",
+    marginRight: "-15px",
+  },
+}));
 
 const CustomStepper: React.FC<CustomStepperProps> = ({
   activeStep,
@@ -44,7 +55,9 @@ const CustomStepper: React.FC<CustomStepperProps> = ({
     <Stepper
       alternativeLabel
       activeStep={activeStep}
-      connector={<CustomStepConnector skeletonColor={skeletonColor} />}
+      connector={
+        <CustomConnector baseColor={baseColor} skeletonColor={skeletonColor} />
+      }
       sx={{ width: "100%" }}
     >
       {steps.map((label, index) => {
@@ -67,7 +80,7 @@ const CustomStepper: React.FC<CustomStepperProps> = ({
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        zIndex: 1, 
+                        zIndex: 1,
                       }}
                     >
                       <IoMdCheckmark
@@ -103,7 +116,7 @@ const CustomStepper: React.FC<CustomStepperProps> = ({
                     </div>
                   );
                 }
-                
+
                 return (
                   <div
                     style={{
@@ -139,7 +152,7 @@ const CustomStepper: React.FC<CustomStepperProps> = ({
                   fontSize: "16px",
                   maxWidth: "90px",
                   fontWeight: isActive || isCompleted ? 700 : 400,
-                  fontFamily: 'Desktop/Body 4 Bold'
+                  fontFamily: "Desktop/Body 4 Bold",
                 }}
               >
                 {label}

@@ -12,20 +12,21 @@ import { MdSettings } from "react-icons/md";
 import { colors } from "../styles/colors";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { accountSchema } from "../utils/validators/accountSchema";
-import { z } from "zod";
+import { psicobankFormSchema, PsicoBankForm } from "../utils/validators/psicobankFormSchema";
 import { PersonType } from "../utils/enums/PersonType";
 import { InstructionView } from "./InstructionView";
 
-type AccountFormValues = z.infer<typeof accountSchema>;
+type SidebarProps = {
+  onShowSuccessAlert?: () => void;
+};
 
-export function Sidebar() {
+export function Sidebar({ onShowSuccessAlert }: SidebarProps) {
   const [active, setActive] = useState<string>("finances");
   const [showFinances, setShowFinances] = useState(false);
   const [showFinanceButton, setShowFinanceButton] = useState(active === "finances");
 
-  const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountSchema),
+  const form = useForm<PsicoBankForm>({
+    resolver: zodResolver(psicobankFormSchema),
     mode: "onChange",
     defaultValues: {
       professional: "joao_silva",
@@ -44,9 +45,13 @@ export function Sidebar() {
       cnpj: "",
       responsibleName: "",
       responsibleCpf: "",
-      message: "", 
+      message: "",
       fullName: "",
       companyName: "",
+      paymentTypes: { pix: false, card: false, bankSlip: false },
+      chargeFine: false,
+      fineValue: "",
+      chargeInterest: false,
     },
   });
 
@@ -133,16 +138,22 @@ export function Sidebar() {
         </IconButton>
         {/* Add more icons here */}
       </SideNav>
-      
       {/* When finances is active, show a button that opens the Finances modal */}
       {showFinanceButton && (
         <InstructionView onClick={() => { setShowFinances(true); }} />
       )}
-
       {showFinances && (
         <ModalOverlay onClick={handleCloseModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <Finances onClose={handleCloseModal} form={form} />
+            <Finances
+              onClose={handleCloseModal}
+              form={form}
+              onSuccess={() => {
+                if (onShowSuccessAlert) onShowSuccessAlert();
+                setShowFinances(false);
+                setShowFinanceButton(true);
+              }}
+            />
           </ModalContent>
         </ModalOverlay>
       )}
@@ -193,16 +204,6 @@ const IconButton = styled.button<{ active?: boolean }>`
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-`;
-
-const FinanceButton = styled.button`
-  margin: 1rem;
-  padding: 0.75rem 1.25rem;
-  background: ${colors.accent};
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
 `;
 
 const ModalOverlay = styled.div`

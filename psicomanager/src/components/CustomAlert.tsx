@@ -1,18 +1,22 @@
 import { Box, Typography, Slide } from "@mui/material";
 import WarningIcon from '@mui/icons-material/Warning';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { colors } from "../styles/colors";
 import { useEffect, useState } from "react";
 
-type AlertProps = {
+type CustomAlertProps = {
   open: boolean;
   title: string;
   message: string;
+  type: "error" | "success"
   onClose?: () => void;
 };
 
-export function Alert({ open, title, message, onClose }: AlertProps) {
+export function CustomAlert({ open, title, message, type, onClose }: CustomAlertProps) {
   const [show, setShow] = useState(open);
-
+  const backgroundColor = type === "error" ? colors.errorBackground : colors.successBackground;
+  const mainColor = type === "error" ? colors.error : colors.success;
+  
   useEffect(() => {
     setShow(open);
     if (open) {
@@ -34,8 +38,8 @@ export function Alert({ open, title, message, onClose }: AlertProps) {
           zIndex: 9999,
           minWidth: 320,
           maxWidth: 400,
-          bgcolor: colors.errorBackground,
-          borderLeft: `6px solid ${colors.error}`,
+          bgcolor: backgroundColor,
+          borderLeft: `6px solid ${mainColor}`,
           boxShadow: 3,
           display: "flex",
           alignItems: "flex-start",
@@ -44,13 +48,17 @@ export function Alert({ open, title, message, onClose }: AlertProps) {
         }}
       >
         <Box alignContent={"center"} height={"auto"} sx={{ pr: 2, pt: 0.5 }}>
+          {type == "error" ?
           <WarningIcon sx={{ color: colors.error, fontSize: 32 }} />
+          :
+          <CheckCircleIcon sx={{ color: colors.success, fontSize: 32 }} />
+          }
         </Box>
         <Box>
           <Typography
             fontFamily="Roboto, Arial, sans-serif"
             fontWeight={500}
-            color={colors.error}
+            color={mainColor}
             fontSize={18}
             mb={0.5}
           >
@@ -59,7 +67,7 @@ export function Alert({ open, title, message, onClose }: AlertProps) {
           <Typography
             fontFamily="Roboto, Arial, sans-serif"
             fontWeight={400}
-            color={colors.error}
+            color={mainColor}
             fontSize={15}
           >
             {message}
@@ -70,4 +78,4 @@ export function Alert({ open, title, message, onClose }: AlertProps) {
   );
 }
 
-export default Alert;
+export default CustomAlert;

@@ -85,6 +85,7 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
   const editorRef = useRef<HTMLDivElement | null>(null);
 
   const [isEmpty, setIsEmpty] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
 
   const DYNAMIC_OPTIONS = [
     { value: "NOME_CLIENTE", label: "Nome do Cliente", token: "{{NOME_CLIENTE}}" },
@@ -385,7 +386,11 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
               contentEditable
               suppressContentEditableWarning
               onInput={onEditorInput}
-              onBlur={onEditorInput}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => {
+                setIsFocused(false);
+                onEditorInput();
+              }}
               tabIndex={0}
               style={{
                 minHeight: 180,
@@ -398,7 +403,7 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
                 fontSize: 14,
               }}
             >
-              {isEmpty && (
+              {!isFocused && isEmpty && (
                 <Box sx={{ color: "rgba(0,0,0,0.4)" }}>
                   Digite o conteúdo do e-mail aqui. Você pode inserir marcações dinâmicas com o botão "+ Inserir".
                 </Box>

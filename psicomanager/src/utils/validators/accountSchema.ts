@@ -20,7 +20,6 @@ export const accountSchema = z.object({
   city: z.string().min(1),
   address: z.string().min(1),
   number: z.string().min(1),
-  message: z.string().optional(),
 }).superRefine((data, ctx) => {
   if (data.personType === "FISICA") {
     if (!data.cpf || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(data.cpf)) {

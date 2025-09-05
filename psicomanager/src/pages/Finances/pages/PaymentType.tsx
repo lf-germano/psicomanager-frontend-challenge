@@ -56,7 +56,6 @@ const WarningBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
-
 const PROFESSIONAL_OPTIONS = [
   { value: "joao_silva", label: "João Silva" },
 ];
@@ -76,7 +75,7 @@ export function PaymentType({
   errors,
   setValue,
 }: PaymentTypeProps) {
-  const cobrarMulta = watch("cobrarMulta");
+  const chargeFine = watch("chargeFine");
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,26 +135,61 @@ export function PaymentType({
             Disponibilizar meios de pagamento: <Required>*</Required>
           </Label>
           <FormGroup>
-            <FormControlLabel
-              control={<Checkbox style={{color: colors.primary}} {...register("meiosPagamento.pix")} />}
-              label="Pix"
+            <Controller
+              name="paymentTypes.pix"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      style={{ color: colors.primary }}
+                      checked={!!field.value}
+                      onChange={e => field.onChange(e.target.checked)}
+                    />
+                  }
+                  label="Pix"
+                />
+              )}
             />
-            <FormControlLabel
-              control={<Checkbox style={{color: colors.primary}} {...register("meiosPagamento.cartao")} />}
-              label="Cartão"
+            <Controller
+              name="paymentTypes.card"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      style={{ color: colors.primary }}
+                      checked={!!field.value}
+                      onChange={e => field.onChange(e.target.checked)}
+                    />
+                  }
+                  label="Cartão"
+                />
+              )}
             />
-            <FormControlLabel
-              control={<Checkbox style={{color: colors.primary}} {...register("meiosPagamento.boleto")} />}
-              label="Boleto bancário"
+            <Controller
+              name="paymentTypes.bankSlip"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      style={{ color: colors.primary }}
+                      checked={!!field.value}
+                      onChange={e => field.onChange(e.target.checked)}
+                    />
+                  }
+                  label="Boleto bancário"
+                />
+              )}
             />
           </FormGroup>
         </Box>
 
-        {/* Multa */}
         <Box mb={2}>
           <Label>Definir multas e juros para todos os boletos após o vencimento</Label>
           <FormControlLabel
-            control={<Checkbox style={{color: colors.primary}} {...register("cobrarMulta")} />}
+            control={<Checkbox style={{color: colors.primary}} {...register("chargeFine")} />}
             label="Cobrar multa"
           />
           <Typography marginTop={2} fontSize={16} color={colors.textPrimary}>
@@ -169,7 +203,7 @@ export function PaymentType({
                 {...field}
                 type="number"
                 placeholder="0,00"
-                disabled={!cobrarMulta}
+                disabled={!chargeFine}
                 fullWidth={false}
                 size="small"
                 error={!!errors.valorMulta}
@@ -179,10 +213,9 @@ export function PaymentType({
           />
         </Box>
 
-        {/* Juros */}
         <Box mb={2}>
           <FormControlLabel
-            control={<Checkbox style={{color: colors.primary}} {...register("cobrarJuros")} />}
+            control={<Checkbox style={{color: colors.primary}} {...register("chargeInterest")} />}
             label="Cobrar juros por dia de atraso (valor 1% ao mês)"
           />
         </Box>
