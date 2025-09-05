@@ -1,5 +1,5 @@
 import { Box, Typography, Slide } from "@mui/material";
-import WarningAmberRoundedIcon from "@mui/icons-material/WarningAmberRounded";
+import WarningIcon from '@mui/icons-material/Warning';
 import { colors } from "../styles/colors";
 import { useEffect, useState } from "react";
 
@@ -43,13 +43,13 @@ export function Alert({ open, title, message, onClose }: AlertProps) {
           borderRadius: 2,
         }}
       >
-        <Box sx={{ pr: 2, pt: 0.5 }}>
-          <WarningAmberRoundedIcon sx={{ color: colors.error, fontSize: 32 }} />
+        <Box alignContent={"center"} height={"auto"} sx={{ pr: 2, pt: 0.5 }}>
+          <WarningIcon sx={{ color: colors.error, fontSize: 32 }} />
         </Box>
         <Box>
           <Typography
             fontFamily="Roboto, Arial, sans-serif"
-            fontWeight={700}
+            fontWeight={500}
             color={colors.error}
             fontSize={18}
             mb={0.5}

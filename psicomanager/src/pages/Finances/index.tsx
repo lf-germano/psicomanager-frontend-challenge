@@ -28,7 +28,6 @@ export function Finances({ onClose }: FinancesProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [alertOpen, setAlertOpen] = useState(false);
 
-  // Only the first step uses the form for now
   const {
     register,
     control,
@@ -76,7 +75,14 @@ export function Finances({ onClose }: FinancesProps) {
         setValue={setValue}
       />
     );
-  else if (activeStep === 1) PageContent = <Channels />;
+  else if (activeStep === 1) PageContent = <Channels 
+      register={register}
+        control={control}
+        watch={watch}
+        errors={errors}
+        setValue={setValue
+      }
+   />;
   else PageContent = <PaymentType />;
 
   return (
@@ -99,8 +105,8 @@ export function Finances({ onClose }: FinancesProps) {
       </Footer>
       <Alert
         open={alertOpen}
-        title="Campos obrigatórios"
-        message="Preencha todos os campos obrigatórios destacados em vermelho."
+        title="Atenção!"
+        message="Os campos obrigatórios não foram preenchidos"
         onClose={() => setAlertOpen(false)}
       />
     </Container>

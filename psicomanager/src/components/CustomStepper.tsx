@@ -8,29 +8,27 @@ import {
 } from "@mui/material";
 import { IoMdCheckmark } from "react-icons/io";
 import { colors } from "../styles/colors";
-import zIndex from "@mui/material/styles/zIndex";
 
 interface CustomStepperProps {
   activeStep: number;
   steps: string[];
-  mainColor: string; // cor da linha e steps futuros
-  baseColor: string; // cor do círculo maior
-  skeletonColor: string; // cor dos steps concluídos
+  mainColor: string; 
+  baseColor: string; 
+  skeletonColor: string;
 }
 
 const CustomStepConnector = styled(StepConnector)<{ skeletonColor: string }>(
   ({ skeletonColor }) => ({
     "&.MuiStepConnector-root": {
-      // Ensures connector is behind the icons
       zIndex: 0,
     },
     "& .MuiStepConnector-line": {
       height: 4,
       border: "none",
-      backgroundColor: skeletonColor, // keep your color!
+      backgroundColor: skeletonColor, 
       borderRadius: 2,
-      marginLeft: "-15px", // half the icon width (30px/2)
-      marginRight: "-15px", // half the icon width
+      marginLeft: "-15px", 
+      marginRight: "-15px", 
     },
   })
 );

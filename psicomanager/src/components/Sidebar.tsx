@@ -15,13 +15,11 @@ export function Sidebar() {
   const [active, setActive] = useState<string | null>(null);
   const [showFinances, setShowFinances] = useState(false);
 
-  // Helper to handle icon click
   const handleIconClick = (name: string, modal?: () => void) => {
     setActive(name);
     if (modal) modal();
   };
 
-  // Reset active when modal closes
   const handleCloseModal = () => {
     setShowFinances(false);
     setActive(null);
@@ -111,12 +109,12 @@ const SideNav = styled.div`
   top: 0;
   left: 0;
   height: 100vh;
-  width: 80px; // slightly wider for padding
+  width: 80px; 
   background: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 8px 0 8px; // horizontal padding added
+  padding: 2rem 8px 0 8px; 
   box-shadow: 2px 0 8px rgba(0,0,0,0.05);
   border-right: 1px solid ${colors.border};
   z-index: 100;
@@ -132,8 +130,8 @@ const IconButton = styled.button<{ active?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%; // ensures button doesn't overflow
-  padding: 1rem 0; // vertical padding only
+  width: 100%; 
+  padding: 1rem 0; 
   ${({ active }) =>
     active &&
     css`

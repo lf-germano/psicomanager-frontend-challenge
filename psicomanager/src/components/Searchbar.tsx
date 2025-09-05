@@ -20,10 +20,8 @@ const SearchBar: React.FC = () => {
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Detect if screen is small (mobile)
   const isMobile = useMediaQuery({ maxWidth: 600 });
 
-  // Dismiss suggestions when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -153,7 +151,7 @@ const Input = styled.input`
   border: none;
   outline: none;
   flex: 1;
-  min-width: 0; // Add this line!
+  min-width: 0; 
   padding: 5px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;

@@ -1,4 +1,5 @@
 import { lightBlue } from "@mui/material/colors";
+import { info } from "console";
 
 export const colors = {
   primary: "#000C52",
@@ -10,11 +11,13 @@ export const colors = {
   errorBackground: "#FEF2EC",
   warning: "#FFFAD6",
   info: "#7D8C94",
+  infoBackground: "#ECF5FE",
   success: "#388e3c",
   textPrimary: "#3D3D3D",
   textSecondary: "#757575",
   textInactive: "#AEB9BF",
   warningText: "#CCB400",
+  infoText: "#2196F3",
   border: "#7d8c94b8",
   shadow: "rgba(0,0,0,0.05)",
   overlay: "rgba(0,0,0,0.3)",
