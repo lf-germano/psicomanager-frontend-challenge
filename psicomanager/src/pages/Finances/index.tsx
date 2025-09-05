@@ -78,6 +78,13 @@ export function Finances({ onClose, form }: FinancesProps) {
         return;
       }
     }
+    if (activeStep === steps.length - 1) {
+      const formData = watch();
+      console.log("Final form data:", formData);  
+      if (onClose) onClose();
+      return;
+    }
+
     if (activeStep < steps.length - 1) setActiveStep((prev) => prev + 1);
   };
 
@@ -110,7 +117,15 @@ export function Finances({ onClose, form }: FinancesProps) {
         setValue={setValue}
       />
     );
-  else PageContent = <PaymentType />;
+  else PageContent = (
+        <PaymentType 
+        register={register}
+        control={control}
+        watch={watch}
+        errors={errors}
+        setValue={setValue}
+        />
+  );
 
   return (
     <Container>
@@ -128,7 +143,7 @@ export function Finances({ onClose, form }: FinancesProps) {
       <Content>{PageContent}</Content>
       <Footer>
         <ClearButton title="Cancelar" onClick={handleCancel} />
-        <MainButton title="Próximo" onClick={handleNext} disabled={activeStep === steps.length - 1} />
+        <MainButton title={activeStep == steps.length - 1 ? "Concluir" : "Próximo"} onClick={handleNext} disabled={activeStep === steps.length - 1} />
       </Footer>
       <Alert
         open={alertOpen}

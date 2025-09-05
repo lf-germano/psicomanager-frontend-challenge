@@ -59,6 +59,14 @@ const WarningBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
+const DisabledLabel = styled(Typography)(({ theme }) => ({
+  fontFamily: "Roboto, Arial, sans-serif",
+  fontSize: 14,
+  fontWeight: 500,
+  marginBottom: 4,
+  color: colors.textInactive,
+}));
+
 const PROFESSIONAL_OPTIONS = [
   { value: "joao_silva", label: "João Silva" },
 ];
@@ -189,9 +197,9 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
 
         <Box display="flex" gap={2} mb={2}>
           <Box flex={1}>
-            <Label>
+            <DisabledLabel>
               Profissional: <Required>*</Required>
-            </Label>
+            </DisabledLabel>
             <FormControl fullWidth>
               <Controller
                 name="professional"
@@ -204,6 +212,7 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
                     displayEmpty
                     inputProps={{ "aria-label": "Profissional" }}
                     size="small"
+                    style={{ backgroundColor: colors.skeletonGray }}
                   >
                     {PROFESSIONAL_OPTIONS.map((opt) => (
                       <MenuItem key={opt.value} value={opt.value}>
