@@ -15,6 +15,7 @@ export const colors = {
   success: "#388e3c",
   textPrimary: "#3D3D3D",
   textSecondary: "#757575",
+  lighterText: "#677176",
   textInactive: "#AEB9BF",
   warningText: "#CCB400",
   infoText: "#2196F3",

@@ -92,8 +92,9 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
 
   const onEditorInput = () => {
     const html = editorRef.current?.innerHTML ?? "";
+    const plainText = editorRef.current?.textContent ?? "";
     setValue("message", html, { shouldValidate: true, shouldDirty: true });
-    setIsEmpty(!html || html === "<br>");
+    setIsEmpty(plainText.trim() === "");
   };
 
   const exec = (command: string, value: string | null = null) => {
@@ -161,9 +162,27 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
     if (opt) insertTokenAtCursor(opt.token);
   };
 
+  const insertBullet = () => {
+    document.execCommand("insertUnorderedList");
+    onEditorInput();
+  };
+
+  const insertNumbered = () => {
+    document.execCommand("insertOrderedList");
+    onEditorInput();
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ maxHeight: "60vh", overflowY: "auto", pr: 2 }}>
+        {/* Hidden controller to register message field */}
+        <Controller
+          name="message"
+          control={control}
+          defaultValue=""
+          render={({ field }) => <input type="hidden" {...field} />}
+        />
+
         <Typography fontFamily="Roboto, Arial, sans-serif" fontWeight={700} fontSize={22} mb={2}>
           Preencha os itens a seguir para configurar o PsicoBank
         </Typography>
@@ -215,15 +234,14 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
             <FormControl fullWidth size="small">
               <Select
                 value={dynamicMark}
-                
-                displayEmpty
                 onChange={(e) => setDynamicMark(e.target.value as string)}
                 inputProps={{ "aria-label": "Marcação dinâmica" }}
-                renderValue={(selected) => (selected ? DYNAMIC_OPTIONS.find(o => o.value === selected)?.label : "~Selecione~")}
+                renderValue={(selected) =>
+                  selected
+                    ? DYNAMIC_OPTIONS.find((o) => o.value === selected)?.label
+                    : "Marcação dinâmica"
+                }
               >
-                <MenuItem value="">
-                  <em>~Selecione~</em>
-                </MenuItem>
                 {DYNAMIC_OPTIONS.map((opt) => (
                   <MenuItem key={opt.value} value={opt.value}>
                     {opt.label}
@@ -234,6 +252,10 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
             <InsertButton title="Inserir" onClick={handleInsertClick} />
             </Box>
           </Box>
+        </Box>
+
+        <Box display="flex" gap={2} alignItems="center" mb={2}>
+          {/* ...other fields if any... */}
         </Box>
 
         <Box mb={1}>
@@ -278,13 +300,27 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
                 }}
                 renderValue={() => "Formato"}
               >
-                <MenuItem value="P">Parágrafo</MenuItem>
-                <MenuItem value="H1">Título 1</MenuItem>
-                <MenuItem value="H2">Título 2</MenuItem>
-                <MenuItem value="H3">Título 3</MenuItem>
-                <MenuItem value="H4">Título 4</MenuItem>
-                <MenuItem value="H5">Título 5</MenuItem>
-                <MenuItem value="H6">Título 6</MenuItem>
+                <MenuItem value="P" style={{ fontSize: 14 }}>
+                  Parágrafo
+                </MenuItem>
+                <MenuItem value="H1" style={{ fontSize: 24, fontWeight: "bold" }}>
+                  Título 1
+                </MenuItem>
+                <MenuItem value="H2" style={{ fontSize: 20, fontWeight: "bold" }}>
+                  Título 2
+                </MenuItem>
+                <MenuItem value="H3" style={{ fontSize: 18, fontWeight: "bold" }}>
+                  Título 3
+                </MenuItem>
+                <MenuItem value="H4" style={{ fontSize: 16, fontWeight: "bold" }}>
+                  Título 4
+                </MenuItem>
+                <MenuItem value="H5" style={{ fontSize: 14, fontWeight: "bold" }}>
+                  Título 5
+                </MenuItem>
+                <MenuItem value="H6" style={{ fontSize: 12, fontWeight: "bold" }}>
+                  Título 6
+                </MenuItem>
               </Select>
             </FormControl>
 
@@ -316,13 +352,13 @@ export function Channels({ register, control, watch, errors, setValue }: Channel
             </Tooltip>
 
             <Tooltip title="Lista desordenada">
-              <IconButton size="small" onClick={() => exec("insertUnorderedList")}>
+              <IconButton size="small" onClick={insertBullet}>
                 <FormatListBulletedIcon fontSize="small" />
               </IconButton>
             </Tooltip>
 
             <Tooltip title="Lista ordenada">
-              <IconButton size="small" onClick={() => exec("insertOrderedList")}>
+              <IconButton size="small" onClick={insertNumbered}>
                 <FormatListNumberedIcon fontSize="small" />
               </IconButton>
             </Tooltip>

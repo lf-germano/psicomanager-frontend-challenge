@@ -407,12 +407,18 @@ export function RegisterAccount({
               <Label>
                 CPF do responsável pela conta <Required>*</Required>
               </Label>
-              <TextField
-                {...register("responsibleCpf")}
-                placeholder="___.___.___-__"
+              <Controller
+                name="responsibleCpf"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}placeholder="___.___.___-__"
+                    value={maskCPF(field.value || "")}
+                    onChange={e => field.onChange(maskCPF(e.target.value))}
                 error={!!errors.responsibleCpf}
                 fullWidth
                 size="small"
+              />)}
               />
             </Box>
           </Box>

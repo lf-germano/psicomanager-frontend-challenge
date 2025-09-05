@@ -5,7 +5,7 @@ import { colors } from "../../styles/colors";
 import RegisterAccount from "./pages/RegisterAccount";
 import Channels from "./pages/Channels";
 import PaymentType from "./pages/PaymentType";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { accountSchema } from "../../utils/validators/accountSchema";
 import Alert from "../../components/Alert";
@@ -13,9 +13,13 @@ import { useState } from "react";
 import { ClearButton } from "../../components/ClearButton";
 import { MainButton } from "../../components/MainButton";
 import { PersonType } from "../../utils/enums/PersonType";
+import { z } from "zod";
+
+type AccountFormValues = z.infer<typeof accountSchema>;
 
 type FinancesProps = {
   onClose?: () => void;
+  form: UseFormReturn<AccountFormValues>;
 };
 
 const steps = [
@@ -24,7 +28,7 @@ const steps = [
   "Forma de pagamento da cobrança",
 ];
 
-export function Finances({ onClose }: FinancesProps) {
+export function Finances({ onClose, form }: FinancesProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [alertOpen, setAlertOpen] = useState(false);
 
@@ -36,19 +40,40 @@ export function Finances({ onClose }: FinancesProps) {
     formState: { errors },
     setValue,
     trigger,
-  } = useForm({
-    resolver: zodResolver(accountSchema),
-    mode: "onChange",
-    defaultValues: {
-      professional: "joao_silva",
-      personType: PersonType.FISICA,
-    },
-  });
+  } = form;
+
+  const collectErrorMessages = (errorsObj: any): string[] => {
+    const messages: string[] = [];
+    for (const key in errorsObj) {
+      if (errorsObj[key]?.message) {
+        messages.push(`${key}: ${errorsObj[key].message}`);
+      }
+      if (typeof errorsObj[key] === "object" && errorsObj[key] !== null && !Array.isArray(errorsObj[key])) {
+        messages.push(...collectErrorMessages(errorsObj[key]));
+      }
+    }
+    return messages;
+  };
 
   const handleNext = async () => {
+    console.log("handleNext");
+    console.log("activeStep", activeStep);
     if (activeStep === 0) {
       const valid = await trigger();
       if (!valid) {
+        const errorList = collectErrorMessages(errors);
+        console.log("Validation errors:", errorList);
+        setAlertOpen(true);
+        return;
+      }
+    }
+    if (activeStep === 1) {
+      const message = watch("message") || "";
+      const tempElem = document.createElement("div");
+      tempElem.innerHTML = message;
+      const plainText = tempElem.textContent || "";
+      if (!plainText.trim()) {
+        console.log("Validation error: message is empty");
         setAlertOpen(true);
         return;
       }
@@ -57,11 +82,11 @@ export function Finances({ onClose }: FinancesProps) {
   };
 
   const handleCancel = () => {
-    if (onClose) onClose();
-  };
-
-  const handleClear = () => {
-    setActiveStep(0);
+    if (activeStep === 0) {
+      if (onClose) onClose();
+    } else {
+      setActiveStep((prev) => prev - 1);
+    }
   };
 
   let PageContent;
@@ -75,14 +100,16 @@ export function Finances({ onClose }: FinancesProps) {
         setValue={setValue}
       />
     );
-  else if (activeStep === 1) PageContent = <Channels 
-      register={register}
+  else if (activeStep === 1)
+    PageContent = (
+      <Channels
+        register={register}
         control={control}
         watch={watch}
         errors={errors}
-        setValue={setValue
-      }
-   />;
+        setValue={setValue}
+      />
+    );
   else PageContent = <PaymentType />;
 
   return (

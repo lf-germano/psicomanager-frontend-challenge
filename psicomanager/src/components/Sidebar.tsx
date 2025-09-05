@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
 import { useState } from "react";
 import { Finances } from "../pages/Finances";
+import styled, { css } from "styled-components";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { FaTachometerAlt } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
@@ -10,19 +10,58 @@ import { FaBullhorn } from "react-icons/fa";
 import { FaBuilding } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import { colors } from "../styles/colors";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { accountSchema } from "../utils/validators/accountSchema";
+import { z } from "zod";
+import { PersonType } from "../utils/enums/PersonType";
+import { InstructionView } from "./InstructionView";
+
+type AccountFormValues = z.infer<typeof accountSchema>;
 
 export function Sidebar() {
-  const [active, setActive] = useState<string | null>(null);
+  const [active, setActive] = useState<string>("finances");
   const [showFinances, setShowFinances] = useState(false);
+  const [showFinanceButton, setShowFinanceButton] = useState(active === "finances");
 
-  const handleIconClick = (name: string, modal?: () => void) => {
+  const form = useForm<AccountFormValues>({
+    resolver: zodResolver(accountSchema),
+    mode: "onChange",
+    defaultValues: {
+      professional: "joao_silva",
+      bank: "",
+      accountType: "",
+      agency: "",
+      accountNumber: "",
+      personType: PersonType.FISICA,
+      phone: "",
+      cep: "",
+      state: "",
+      city: "",
+      address: "",
+      number: "",
+      cpf: "",
+      cnpj: "",
+      responsibleName: "",
+      responsibleCpf: "",
+      message: "", 
+      fullName: "",
+      companyName: "",
+    },
+  });
+
+  const handleIconClick = (name: string) => {
     setActive(name);
-    if (modal) modal();
+    if (name === "finances") {
+      setShowFinanceButton(true);
+    } else {
+      setShowFinanceButton(false);
+    }
   };
 
   const handleCloseModal = () => {
     setShowFinances(false);
-    setActive(null);
+    setShowFinanceButton(true); 
   };
 
   return (
@@ -54,7 +93,7 @@ export function Sidebar() {
         </IconButton>
         <IconButton
           active={active === "finances"}
-          onClick={() => handleIconClick("finances", () => setShowFinances(true))}
+          onClick={() => handleIconClick("finances")}
           title="Financeiro"
         >
           <FaMoneyBillAlt color={active === "finances" ? "#fff" : colors.textPrimary} size={22} />
@@ -94,10 +133,16 @@ export function Sidebar() {
         </IconButton>
         {/* Add more icons here */}
       </SideNav>
+      
+      {/* When finances is active, show a button that opens the Finances modal */}
+      {showFinanceButton && (
+        <InstructionView onClick={() => { setShowFinances(true); }} />
+      )}
+
       {showFinances && (
         <ModalOverlay onClick={handleCloseModal}>
-          <ModalContent onClick={e => e.stopPropagation()}>
-            <Finances />
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <Finances onClose={handleCloseModal} form={form} />
           </ModalContent>
         </ModalOverlay>
       )}
@@ -148,6 +193,16 @@ const IconButton = styled.button<{ active?: boolean }>`
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
+`;
+
+const FinanceButton = styled.button`
+  margin: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: ${colors.accent};
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const ModalOverlay = styled.div`
