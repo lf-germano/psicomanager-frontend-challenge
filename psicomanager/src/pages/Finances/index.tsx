@@ -15,6 +15,7 @@ import { ClearButton } from "../../components/ClearButton";
 import { MainButton } from "../../components/MainButton";
 import { z } from "zod";
 import { PsicoBankForm } from "../../utils/validators/psicobankFormSchema";
+import { Grid } from "@mui/material";
 
 type AccountFormValues = z.infer<typeof accountSchema>;
 
@@ -136,6 +137,7 @@ export function Finances({ onClose, form, onSuccess }: FinancesProps) {
   );
 
   return (
+    <Grid container spacing={3} justifyContent="center">
     <Container>
       <Header>
         <Title>Ativar o PsicoBank</Title>
@@ -161,6 +163,7 @@ export function Finances({ onClose, form, onSuccess }: FinancesProps) {
         onClose={() => setErrorAlertOpen(false)}
       />
     </Container>
+    </Grid>
   );
 }
 
@@ -170,7 +173,7 @@ const Container = styled.div`
   align-items: stretch;
   padding: 2rem;
   width: 50rem;
-  max-width: 100vw;
+  max-width: 90vw;
   box-sizing: border-box;
 
   @media (max-width: 600px) {

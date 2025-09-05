@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { colors } from "../../../styles/colors";
+import Grid from "@mui/material/Grid";
 
 const theme = createTheme({
   typography: {
@@ -157,8 +158,8 @@ export function RegisterAccount({
           </WarningItem>
         </WarningBox>
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={1}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <DisabledLabel>
               Profissional: <Required>*</Required>
             </DisabledLabel>
@@ -185,11 +186,11 @@ export function RegisterAccount({
                 )}
               />
             </FormControl>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={1}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Label>
               Banco <Required>*</Required>
             </Label>
@@ -216,8 +217,8 @@ export function RegisterAccount({
                 )}
               />
             </FormControl>
-          </Box>
-          <Box flex={1}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Label>
               Tipo de Conta <Required>*</Required>
             </Label>
@@ -244,11 +245,11 @@ export function RegisterAccount({
                 )}
               />
             </FormControl>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={1}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Label>
               Agência <Required>*</Required>
             </Label>
@@ -267,8 +268,8 @@ export function RegisterAccount({
                   size="small"
                 />)}
             />
-          </Box>
-          <Box flex={1}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Label>
               Conta com Dígito <Required>*</Required>
             </Label>
@@ -286,11 +287,11 @@ export function RegisterAccount({
                   size="small"
                 />)}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={1}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Label>
               Tipo de Pessoa <Required>*</Required>
             </Label>
@@ -319,10 +320,10 @@ export function RegisterAccount({
                 )}
               />
             </FormControl>
-          </Box>
+          </Grid>
           {personType === "FISICA" ? (
             <>
-              <Box flex={1}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Label>
                   CPF <Required>*</Required>
                 </Label>
@@ -342,8 +343,8 @@ export function RegisterAccount({
                     />
                   )}
                 />
-              </Box>
-              <Box flex={1}>
+              </Grid>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Label>
                   Telefone <Required>*</Required>
                 </Label>
@@ -363,11 +364,11 @@ export function RegisterAccount({
                     />
                   )}
                 />
-              </Box>
+              </Grid>
             </>
           ) : (
             <>
-              <Box flex={1}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Label>
                   CNPJ <Required>*</Required>
                 </Label>
@@ -386,8 +387,8 @@ export function RegisterAccount({
                     />
                   )}
                 />
-              </Box>
-              <Box flex={1}>
+              </Grid>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <Label>
                   Telefone <Required>*</Required>
                 </Label>
@@ -407,29 +408,31 @@ export function RegisterAccount({
                     />
                   )}
                 />
-              </Box>
+              </Grid>
             </>
           )}
-        </Box>
+        </Grid>
 
         {personType === "FISICA" && (
-          <Box mb={2}>
-            <Label>
-              Nome Completo <Required>*</Required>
-            </Label>
-            <TextField
-              {...register("fullName")}
-              placeholder="Digite aqui"
-              error={!!errors.fullName}
-              fullWidth
-              size="small"
-            />
-          </Box>
+          <Grid container spacing={2} mb={2}>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <Label>
+                Nome Completo <Required>*</Required>
+              </Label>
+              <TextField
+                {...register("fullName")}
+                placeholder="Digite aqui"
+                error={!!errors.fullName}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+          </Grid>
         )}
 
         {personType === "JURIDICA" && (
-          <Box display="flex" gap={2} mb={2}>
-            <Box flex={1}>
+          <Grid container spacing={2} mb={2}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Label>
                 Nome do responsável pela conta <Required>*</Required>
               </Label>
@@ -440,8 +443,8 @@ export function RegisterAccount({
                 fullWidth
                 size="small"
               />
-            </Box>
-            <Box flex={1}>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
               <Label>
                 CPF do responsável pela conta <Required>*</Required>
               </Label>
@@ -460,27 +463,29 @@ export function RegisterAccount({
                   />
                 )}
               />
-            </Box>
-          </Box>
+            </Grid>
+          </Grid>
         )}
 
         {personType === "JURIDICA" && (
-          <Box mb={2}>
-            <Label>
-              Razão Social <Required>*</Required>
-            </Label>
-            <TextField
-              {...register("companyName")}
-              placeholder="Digite aqui"
-              error={!!errors.companyName}
-              fullWidth
-              size="small"
-            />
-          </Box>
+          <Grid container spacing={2} mb={2}>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <Label>
+                Razão Social <Required>*</Required>
+              </Label>
+              <TextField
+                {...register("companyName")}
+                placeholder="Digite aqui"
+                error={!!errors.companyName}
+                fullWidth
+                size="small"
+              />
+            </Grid>
+          </Grid>
         )}
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={1}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Label>
               CEP <Required>*</Required>
             </Label>
@@ -500,8 +505,8 @@ export function RegisterAccount({
                 />
               )}
             />
-          </Box>
-          <Box flex={1}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Label>
               Estado <Required>*</Required>
             </Label>
@@ -528,8 +533,8 @@ export function RegisterAccount({
                 )}
               />
             </FormControl>
-          </Box>
-          <Box flex={1}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Label>
               Cidade <Required>*</Required>
             </Label>
@@ -540,11 +545,11 @@ export function RegisterAccount({
               fullWidth
               size="small"
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
 
-        <Box display="flex" gap={2} mb={2}>
-          <Box flex={2}>
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 10 }}>
             <Label>
               Endereço <Required>*</Required>
             </Label>
@@ -555,8 +560,8 @@ export function RegisterAccount({
               fullWidth
               size="small"
             />
-          </Box>
-          <Box flex={1}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 2 }}>
             <Label>
               Número <Required>*</Required>
             </Label>
@@ -575,8 +580,8 @@ export function RegisterAccount({
                   size="small"
                 />)}
             />
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </Box>
     </ThemeProvider>
   );
